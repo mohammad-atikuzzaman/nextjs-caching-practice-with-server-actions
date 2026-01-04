@@ -17,8 +17,8 @@ export const productSchema = z.object({
     .max(20, "Brand name too long"),
   price: z
     .number()
-    .min(2, "Price name too short")
-    .max(10, "Price name too long"),
+    .min(2, "Price too short")
+    .max(1000000, "Price too long"),
 });
 
 export type BlogInput = z.infer<typeof productSchema>;

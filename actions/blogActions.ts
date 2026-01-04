@@ -3,7 +3,7 @@
 import { connectDB } from "@/database/dbConfig";
 import Blog from "@/models/Blog";
 import { blogSchema } from "@/lib/validators/blog.schema";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { BlogActionState } from "@/types/action.blog";
 
@@ -12,7 +12,7 @@ export async function createBlog(
   formData: FormData
 ): Promise<BlogActionState> {
   await connectDB();
-
+  // 
   const rawData = {
     title: formData.get("title"),
     content: formData.get("content"),
@@ -40,6 +40,7 @@ export async function createBlog(
     };
   }
 
+  revalidateTag("blogs", "max");
   revalidatePath("/blogs");
   redirect("/blogs");
 }

@@ -4,7 +4,7 @@ import { connectDB } from "@/database/dbConfig";
 import { productSchema } from "@/lib/validators/product.schema";
 import Product from "@/models/Product";
 import { ProductActionState } from "@/types/action.product";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function addProductAction(
@@ -17,7 +17,7 @@ export async function addProductAction(
     name: formData.get("name"),
     description: formData.get("description"),
     brand: formData.get("brand"),
-    price: formData.get("price"),
+    price: Number(formData.get("price")),
   };
 
   const parsed = productSchema.safeParse(rawData);
@@ -41,6 +41,7 @@ export async function addProductAction(
     };
   }
 
-  revalidatePath("/blogs");
-  redirect("/blogs");
+  revalidateTag("products", "max");
+  revalidatePath("/products");
+  redirect("/products");
 }
