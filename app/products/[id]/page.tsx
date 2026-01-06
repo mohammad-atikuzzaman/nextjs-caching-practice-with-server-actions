@@ -1,3 +1,4 @@
+
 import BackButton from "@/ui/BackButton";
 import { getProductById, getProductIdsForStaticParams } from "@/utils/getProductsData";
 import { notFound } from "next/navigation";

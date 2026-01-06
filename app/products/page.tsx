@@ -3,6 +3,14 @@ import BackButton from "@/ui/BackButton";
 import { getProductsPaginated } from "@/utils/getProductsData";
 import Link from "next/link";
 import { Suspense } from "react";
+import {
+  ShoppingBagIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  CurrencyDollarIcon,
+  BuildingStorefrontIcon,
+  PlusIcon,
+} from "@heroicons/react/24/outline";
 
 interface PageProps {
   searchParams: Promise<{ page?: string }>;
@@ -40,27 +48,39 @@ const Products = async ({ searchParams }: PageProps) => {
   );
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">
+    <div className="container mx-auto py-6 px-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div className="flex items-center gap-3">
           <BackButton />
-          Products : {pagination.total}
-        </h1>
-        <Link href="/products/add-product">
-          <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
-            Add Product
-          </button>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <ShoppingBagIcon className="w-6 h-6" />
+              Products
+            </h1>
+            <p className="text-gray-600 text-sm mt-1">
+              {pagination.total} total products • Page {pagination.page} of {pagination.totalPages}
+            </p>
+          </div>
+        </div>
+        
+        <Link 
+          href="/products/add-product"
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+        >
+          <PlusIcon className="w-4 h-4" />
+          Add Product
         </Link>
       </div>
 
       {products.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">No products found.</p>
+        <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
+          <ShoppingBagIcon className="w-12 h-12 mx-auto text-gray-400" />
+          <p className="mt-4 text-gray-600">No products found</p>
         </div>
       ) : (
         <>
           <Suspense fallback={<ProductGridSkeleton />}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {products.map((product) => (
                 <ProductCard key={product._id} data={product} />
               ))}
@@ -80,7 +100,7 @@ const Products = async ({ searchParams }: PageProps) => {
 
 export default Products;
 
-interface BlogInterface {
+interface ProductInterface {
   data: {
     _id: string;
     name: string;
@@ -92,28 +112,51 @@ interface BlogInterface {
   };
 }
 
-const ProductCard = ({ data }: BlogInterface) => {
-  const { _id, name, description, brand, inStock } = data;
+const ProductCard = ({ data }: ProductInterface) => {
+  const { _id, name, description, brand, price, inStock } = data;
 
   return (
-    <article className="bg-white border border-gray-200 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-      <h2 className="text-xl font-semibold mb-2 line-clamp-2">{name}</h2>
-
-      <p className="text-gray-600 mb-2 line-clamp-3">{description}</p>
-
-      <div className="flex items-center justify-between mt-4">
-        <p className="text-sm text-gray-500">
-          By <span className="font-medium">{brand}</span>
-        </p>
-        <p>{inStock ? "🟢" : "🔴"}</p>
+    <article className="border border-gray-200 rounded-lg p-5 hover:border-gray-300 hover:shadow-sm transition-all bg-white">
+      <div className="space-y-3">
+        <h2 className="font-bold text-gray-900 line-clamp-2 text-lg">{name}</h2>
+        
+        <p className="text-gray-600 text-sm line-clamp-3">{description}</p>
+        
+        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+          <div className="flex items-center gap-1 text-sm text-gray-700">
+            <BuildingStorefrontIcon className="w-4 h-4" />
+            <span>{brand}</span>
+          </div>
+          
+          <div className="flex items-center gap-1 text-sm font-medium text-gray-900">
+            <CurrencyDollarIcon className="w-4 h-4" />
+            <span>{price}</span>
+          </div>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <Link
+            href={`/products/${_id}`}
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          >
+            View details
+          </Link>
+          
+          <div className="flex items-center gap-1">
+            {inStock ? (
+              <>
+                <CheckCircleIcon className="w-4 h-4 text-green-600" />
+                <span className="text-xs text-green-600">In Stock</span>
+              </>
+            ) : (
+              <>
+                <XCircleIcon className="w-4 h-4 text-red-600" />
+                <span className="text-xs text-red-600">Out of Stock</span>
+              </>
+            )}
+          </div>
+        </div>
       </div>
-
-      <Link
-        href={`/products/${_id}`}
-        className="inline-block mt-4 text-blue-600 hover:text-blue-800 hover:underline font-medium"
-      >
-        Read more →
-      </Link>
     </article>
   );
 };
@@ -121,17 +164,32 @@ const ProductCard = ({ data }: BlogInterface) => {
 // Loading Skeleton
 const ProductGridSkeleton = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {[...Array(9)].map((_, i) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {[...Array(6)].map((_, i) => (
         <div
           key={i}
-          className="bg-white border border-gray-200 rounded-lg shadow-md p-6 animate-pulse"
+          className="border border-gray-200 rounded-lg p-5 animate-pulse bg-white"
         >
-          <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-          <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-          <div className="h-4 bg-gray-200 rounded w-5/6 mb-2"></div>
-          <div className="h-4 bg-gray-200 rounded w-4/6 mb-4"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+          <div className="space-y-3">
+            <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+            <div className="space-y-2">
+              <div className="h-3 bg-gray-200 rounded w-full"></div>
+              <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+              <div className="h-3 bg-gray-200 rounded w-4/6"></div>
+            </div>
+            
+            <div className="pt-3 border-t border-gray-100">
+              <div className="flex items-center justify-between">
+                <div className="h-3 bg-gray-200 rounded w-16"></div>
+                <div className="h-3 bg-gray-200 rounded w-12"></div>
+              </div>
+              
+              <div className="flex items-center justify-between mt-3">
+                <div className="h-3 bg-gray-200 rounded w-20"></div>
+                <div className="h-3 bg-gray-200 rounded w-16"></div>
+              </div>
+            </div>
+          </div>
         </div>
       ))}
     </div>
