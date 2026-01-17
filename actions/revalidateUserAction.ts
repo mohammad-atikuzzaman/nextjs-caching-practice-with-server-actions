@@ -1,7 +1,8 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
+import { CACHE_TAGS } from "@/lib/cache-config";
 
 export async function revalidateUsers() {
-  revalidatePath("/users");
+  revalidateTag(CACHE_TAGS.USERS, "max");
 }

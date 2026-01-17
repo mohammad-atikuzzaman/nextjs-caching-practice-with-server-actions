@@ -13,10 +13,12 @@ const blogSchema = new Schema({
   author: {
     type: String,
     required: true,
+    index: true,
   },
   createdAt: {
     type: Date,
     default: Date.now,
+    index: true,
   },
 });
 

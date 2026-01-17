@@ -4,6 +4,7 @@ import { connectDB } from "@/database/dbConfig";
 import { productSchema } from "@/lib/validators/product.schema";
 import Product from "@/models/Product";
 import { ProductActionState } from "@/types/action.product";
+import { CACHE_TAGS } from "@/lib/cache-config";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -41,7 +42,7 @@ export async function addProductAction(
     };
   }
 
-  revalidateTag("products", "max");
+  revalidateTag(CACHE_TAGS.PRODUCTS, "max");
   revalidatePath("/products");
   redirect("/products");
 }

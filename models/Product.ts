@@ -37,6 +37,7 @@ const productSchema = new Schema(
     availableFrom: {
       type: Date,
       default: Date.now,
+      index: true,
     },
   },
 );

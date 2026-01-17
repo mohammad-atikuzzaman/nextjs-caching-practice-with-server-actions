@@ -60,12 +60,13 @@ const Blogs = async ({ searchParams }: PageProps) => {
               Blog Posts
             </h1>
             <p className="text-gray-600 text-sm mt-1">
-              {pagination.total} total posts • Page {pagination.page} of {pagination.totalPages}
+              {pagination.total} total posts • Page {pagination.page} of{" "}
+              {pagination.totalPages}
             </p>
           </div>
         </div>
-        
-        <Link 
+
+        <Link
           href="/blogs/create-blog"
           className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
         >
@@ -78,7 +79,7 @@ const Blogs = async ({ searchParams }: PageProps) => {
         <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
           <DocumentTextIcon className="w-12 h-12 mx-auto text-gray-400" />
           <p className="mt-4 text-gray-600">No blog posts yet</p>
-          <Link 
+          <Link
             href="/blogs/create-blog"
             className="inline-block mt-3 text-blue-600 hover:text-blue-800 text-sm font-medium"
           >
@@ -134,23 +135,21 @@ const BlogCard = ({ data }: BlogInterface) => {
           <h2 className="font-bold text-gray-900 line-clamp-2 text-lg mb-2">
             {title}
           </h2>
-          <p className="text-gray-600 text-sm line-clamp-3">
-            {content}
-          </p>
+          <p className="text-gray-600 text-sm line-clamp-3">{content}</p>
         </div>
-        
+
         <div className="pt-3 border-t border-gray-100 space-y-2">
           <div className="flex items-center gap-2 text-sm text-gray-700">
             <UserIcon className="w-4 h-4 text-gray-500" />
             <span>{author}</span>
           </div>
-          
+
           <div className="flex items-center gap-2 text-sm text-gray-700">
             <CalendarIcon className="w-4 h-4 text-gray-500" />
             <time>{formattedDate}</time>
           </div>
         </div>
-        
+
         <Link
           href={`/blogs/${_id}`}
           className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium"
@@ -181,19 +180,19 @@ const BlogsGridSkeleton = () => {
                 <div className="h-3 bg-gray-200 rounded w-4/6"></div>
               </div>
             </div>
-            
+
             <div className="pt-3 border-t border-gray-100 space-y-2">
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 bg-gray-200 rounded"></div>
                 <div className="h-3 bg-gray-200 rounded w-20"></div>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 bg-gray-200 rounded"></div>
                 <div className="h-3 bg-gray-200 rounded w-24"></div>
               </div>
             </div>
-            
+
             <div className="h-3 bg-gray-200 rounded w-28"></div>
           </div>
         </div>

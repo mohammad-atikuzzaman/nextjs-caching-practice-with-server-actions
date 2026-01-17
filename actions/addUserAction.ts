@@ -2,8 +2,9 @@
 
 import { userSchema } from "@/lib/validators/user.schema";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { UserActionState } from "@/types/action.user";
+import { CACHE_TAGS } from "@/lib/cache-config";
 
 
 export async function addUserAction(
@@ -29,7 +30,7 @@ export async function addUserAction(
   try {
     const apiUrl = process.env.API_URL || "http://localhost:8000";
 
-    const res = await fetch(`${apiUrl}/persons`, {
+    const res = await fetch(`${apiUrl}/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +48,8 @@ export async function addUserAction(
       }
       throw new Error(errorMessage);
     }
-    revalidatePath("/users"); 
+    revalidateTag(CACHE_TAGS.USERS, "max");
+    revalidatePath("/users");
 
   } catch (error) {
     console.error("Create user failed:", error);

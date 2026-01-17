@@ -12,7 +12,7 @@ export const getProductIdsForStaticParams = cache(
         await connectDB();
         const products = await Product.find({})
           .select("_id")
-          // .sort({ views: -1 }) // In real world, sort by popularity
+          // Sort by availability date
           .sort({ availableFrom: -1 })
           .limit(limit)
           .lean()

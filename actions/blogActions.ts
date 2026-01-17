@@ -6,6 +6,7 @@ import { blogSchema } from "@/lib/validators/blog.schema";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { BlogActionState } from "@/types/action.blog";
+import { CACHE_TAGS } from "@/lib/cache-config";
 
 export async function createBlog(
   _: BlogActionState,
@@ -40,7 +41,7 @@ export async function createBlog(
     };
   }
 
-  revalidateTag("blogs", "max");
+  revalidateTag(CACHE_TAGS.BLOGS, "max");
   revalidatePath("/blogs");
   redirect("/blogs");
 }
